@@ -5,7 +5,7 @@ Summary:	libRedfish is a C client library that allows for Creation of Entities (
 
 License:	BSD-3
 URL:		https://github.com/DMTF/libredfish
-Source0:	https://github.com/DMTF/libredfish/archive/%{version}.tar.gz
+Source0:	https://github.com/kcomer1/libredfish/archive/%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  libcurl-devel
