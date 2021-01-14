@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.3.1] - 2021-01-14
+- Enabled verify host
+
 ## [1.3.0] - 2020-06-26
 - Various fixes to handling cleanup of asyncToSync
 

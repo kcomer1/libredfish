@@ -262,7 +262,7 @@ threadRet rawAsyncWorkThread(void* data)
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
     //curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteMemory);
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, curlReadMemory);
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, asyncHeaderCallback);
