@@ -127,7 +127,7 @@ typedef void (*redfishEventCallback)(redfishPayload* event, enumeratorAuthentica
 #define REDFISH_FLAG_SERVICE_BAD_REDIRECTS  0x00000002
 
 REDFISH_EXPORT void setTestVar(bool var);
-REDFISH_EXPORT bool getTestVar(bool);
+REDFISH_EXPORT bool getTestVar(void);
 
 /**
  * @brief Create a redfish service connection.
