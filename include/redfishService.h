@@ -126,6 +126,9 @@ typedef void (*redfishEventCallback)(redfishPayload* event, enumeratorAuthentica
 /** A flag used to indicate that the Redfish Service is not RFC compliant in terms of issuing Redirects **/
 #define REDFISH_FLAG_SERVICE_BAD_REDIRECTS  0x00000002
 
+REDFISH_EXPORT void setTestVar(bool var);
+REDFISH_EXPORT bool getTestVar(bool);
+
 /**
  * @brief Create a redfish service connection.
  *
