@@ -58,19 +58,6 @@ static bool createServiceEnumeratorTokenAsync(const char* host, const char* root
 static bool getVersionsAsync(redfishService* service, const char* rootUri, redfishCreateAsyncCallback callback, void* context);
 static char* getDestinationAddress(const char* addressInfo, SOCKET* socket);
 
-void setTestVar(bool var);
-bool getTestVar(void);
-
-bool testingVar = false;
-
-void setTestVar(bool var) {
-    testingVar = var;
-    return;
-}
-
-bool getTestVar(void) {
-    return testingVar;
-}
 
 redfishService* createServiceEnumerator(const char* host, const char* rootUri, enumeratorAuthentication* auth, unsigned int flags)
 {
