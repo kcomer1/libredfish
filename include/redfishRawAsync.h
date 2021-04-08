@@ -96,10 +96,6 @@ typedef struct _asyncHttpResponse
     char* body;
 } asyncHttpResponse;
 
-REDFISH_EXPORT void setHostVerification(bool hostVerBool);
-
-REDFISH_EXPORT bool getHostVerification(void);
-
 /**
  * @brief A callback when the request is finished.
  *

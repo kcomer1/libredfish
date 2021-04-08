@@ -68,6 +68,9 @@ typedef struct _redfishService {
      * @see bearerToken
      */
     char* otherAuth;
+
+    char* caPath;
+
     /** A lock to regulate access to this struct **/
 #ifdef _MSC_VER
     HANDLE mutex;

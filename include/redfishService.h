@@ -78,6 +78,9 @@ typedef struct {
 typedef struct {
         /** The authentication type to use **/
         unsigned int authType;
+
+        char* caPath;
+
         /** The actual authentication codes **/
         union {
             /** The data used for REDFISH_AUTH_BASIC or REDFISH_AUTH_SESSION **/

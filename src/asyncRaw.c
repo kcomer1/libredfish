@@ -26,25 +26,6 @@ static size_t curlReadMemory(void *ptr, size_t size, size_t nmemb, void *userp);
 static int curlSeekMemory(void *userp, curl_off_t offset, int origin);
 static int addHeader(httpHeader** headersPtr, const char* name, const char* value);
 
-long hostVerification = 0L;
-
-void setHostVerification(bool hostVerBool)
-{
-    if(hostVerBool) {
-        hostVerification = 2L;
-    } else {
-        hostVerification = 0L;
-    }
-}
-
-bool getHostVerification(void)
-{
-    if(hostVerification == 0L) {
-        return false;
-    }
-    return true;
-}
-
 asyncHttpRequest* createRequest(const char* url, httpMethod method, size_t bodysize, char* body)
 {
     asyncHttpRequest* ret = malloc(sizeof(asyncHttpRequest));
@@ -281,7 +262,15 @@ threadRet rawAsyncWorkThread(void* data)
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, true);
     //curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, hostVerification);
+
+    bool enableHostVer = 0L;
+    if(service->caPath != NULL)
+    {
+        enableHostVer = 2L;
+        curl_easy_setopt(curl, CURLOPT_CAINFO, service->caPath);
+    }
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, enableHostVer);
+
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteMemory);
     curl_easy_setopt(curl, CURLOPT_READFUNCTION, curlReadMemory);
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, asyncHeaderCallback);

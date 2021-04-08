@@ -41,7 +41,7 @@ redfishAsyncOptions gDefaultOptions = {
 };
 
 static redfishService* createServiceEnumeratorNoAuth(const char* host, const char* rootUri, bool enumerate, unsigned int flags);
-static redfishService* createServiceEnumeratorBasicAuth(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags);
+static redfishService* createServiceEnumeratorBasicAuth(const char* host, const char* rootUri, const char* username, const char* password, const char* caPath, unsigned int flags);
 static redfishService* createServiceEnumeratorSessionAuth(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags);
 static redfishService* createServiceEnumeratorToken(const char* host, const char* rootUri, const char* token, unsigned int flags);
 static char* makeUrlForService(redfishService* service, const char* uri);
@@ -52,7 +52,7 @@ static void addStringToJsonObject(json_t* object, const char* key, const char* v
 static redfishPayload* getPayloadFromAsyncResponse(asyncHttpResponse* response, redfishService* service);
 static unsigned char* base64_encode(const unsigned char* src, size_t len, size_t* out_len);
 static bool createServiceEnumeratorNoAuthAsync(const char* host, const char* rootUri, unsigned int flags, redfishCreateAsyncCallback callback, void* context);
-static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags, redfishCreateAsyncCallback callback, void* context);
+static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* rootUri, const char* username, const char* password, const char* caPath, unsigned int flags, redfishCreateAsyncCallback callback, void* context);
 static bool createServiceEnumeratorSessionAuthAsync(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags, redfishCreateAsyncCallback callback, void* context);
 static bool createServiceEnumeratorTokenAsync(const char* host, const char* rootUri, const char* token, unsigned int flags, redfishCreateAsyncCallback callback, void* context);
 static bool getVersionsAsync(redfishService* service, const char* rootUri, redfishCreateAsyncCallback callback, void* context);
@@ -68,7 +68,7 @@ redfishService* createServiceEnumerator(const char* host, const char* rootUri, e
     }
     if(auth->authType == REDFISH_AUTH_BASIC)
     {
-        return createServiceEnumeratorBasicAuth(host, rootUri, auth->authCodes.userPass.username, auth->authCodes.userPass.password, flags);
+        return createServiceEnumeratorBasicAuth(host, rootUri, auth->authCodes.userPass.username, auth->authCodes.userPass.password, auth->caPath, flags);
     }
     else if(auth->authType == REDFISH_AUTH_BEARER_TOKEN)
     {
@@ -521,7 +521,7 @@ bool createServiceEnumeratorAsync(const char* host, const char* rootUri, enumera
     }
     if(auth->authType == REDFISH_AUTH_BASIC)
     {
-        return createServiceEnumeratorBasicAuthAsync(host, rootUri, auth->authCodes.userPass.username, auth->authCodes.userPass.password, flags, callback, context);
+        return createServiceEnumeratorBasicAuthAsync(host, rootUri, auth->authCodes.userPass.username, auth->authCodes.userPass.password, auth->caPath, flags, callback, context);
     }
     else if(auth->authType == REDFISH_AUTH_BEARER_TOKEN)
     {
@@ -1285,7 +1285,7 @@ static bool createServiceEnumeratorNoAuthAsync(const char* host, const char* roo
     return rc;
 }
 
-static redfishService* createServiceEnumeratorBasicAuth(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags)
+static redfishService* createServiceEnumeratorBasicAuth(const char* host, const char* rootUri, const char* username, const char* password, const char* caPath, unsigned int flags)
 {
     redfishService* ret;
     char userPass[1024] = {0};
@@ -1305,10 +1305,16 @@ static redfishService* createServiceEnumeratorBasicAuth(const char* host, const 
     ret = createServiceEnumeratorNoAuth(host, rootUri, false, flags);
     ret->otherAuth = safeStrdup(userPass);
     ret->versions = getVersions(ret, rootUri);
+
+    if(caPath != NULL)
+    {
+        ret->caPath = safeStrdub(caPath);
+    }
+
     return ret;
 }
 
-static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* rootUri, const char* username, const char* password, unsigned int flags, redfishCreateAsyncCallback callback, void* context)
+static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* rootUri, const char* username, const char* password, const char* caPath, unsigned int flags, redfishCreateAsyncCallback callback, void* context)
 {
     redfishService* ret;
     char userPass[1024] = {0};
@@ -1334,6 +1340,12 @@ static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* 
     }
     ret->otherAuth = safeStrdup(userPass);
     rc = getVersionsAsync(ret, rootUri, callback, context);
+
+    if(caPath != NULL)
+    {
+        ret->caPath = safeStrdub(caPath);
+    }
+
     if(rc == false)
     {
         serviceDecRef(ret);

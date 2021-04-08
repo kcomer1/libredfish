@@ -421,7 +421,15 @@ static threadRet WINAPI sseThread(void* args)
         headers = curl_slist_append(headers, headerStr);
     }
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
+    bool enableHostVer = 0L;
+    if(service->caPath != NULL)
+    {
+        enableHostVer = 2L;
+        curl_easy_setopt(curl, CURLOPT_CAINFO, service->caPath);
+    }
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, enableHostVer);
+
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, gotSSEData);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readChunk);
     curl_easy_setopt(curl, CURLOPT_URL, uri);
