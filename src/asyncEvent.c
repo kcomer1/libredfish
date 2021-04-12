@@ -423,7 +423,7 @@ static threadRet WINAPI sseThread(void* args)
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
     bool enableHostVer = 0L;
-    if(service->caPath != NULL)
+    if(data->service->caPath != NULL)
     {
         enableHostVer = 2L;
         curl_easy_setopt(curl, CURLOPT_CAINFO, service->caPath);
