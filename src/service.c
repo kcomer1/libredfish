@@ -1308,7 +1308,7 @@ static redfishService* createServiceEnumeratorBasicAuth(const char* host, const 
 
     if(caPath != NULL)
     {
-        ret->caPath = safeStrdub(caPath);
+        ret->caPath = safeStrdup(caPath);
     }
 
     return ret;
@@ -1343,7 +1343,7 @@ static bool createServiceEnumeratorBasicAuthAsync(const char* host, const char* 
 
     if(caPath != NULL)
     {
-        ret->caPath = safeStrdub(caPath);
+        ret->caPath = safeStrdup(caPath);
     }
 
     if(rc == false)
