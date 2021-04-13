@@ -61,6 +61,7 @@ static char* getDestinationAddress(const char* addressInfo, SOCKET* socket);
 
 redfishService* createServiceEnumerator(const char* host, const char* rootUri, enumeratorAuthentication* auth, unsigned int flags)
 {
+    printf("%s: Entered. host = %s, rootUri = %s, auth = %p, flags = %x\n", __func__, host, rootUri, auth, flags);
     REDFISH_DEBUG_DEBUG_PRINT("%s: Entered. host = %s, rootUri = %s, auth = %p, flags = %x\n", __func__, host, rootUri, auth, flags);
     if(auth == NULL)
     {
